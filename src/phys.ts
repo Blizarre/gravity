@@ -19,13 +19,13 @@ class Vector {
     add(other: Vector): Vector {
         return new Vector(this.x + other.x, this.y + other.y);
     }
-    addIp(other: Vector):Vector {
+    addIp(other: Vector): Vector {
         this.x += other.x;
         this.y += other.y;
         return this;
     }
 
-    equal(other:Vector): boolean {
+    equal(other: Vector): boolean {
         return this.x == other.x && this.y == other.y;
     }
 
@@ -70,19 +70,19 @@ class World {
 
     planets: Point[] = [];
 
-    constructor(public width: number, public height:number, public nb_planets: number) {
+    constructor(public width: number, public height: number, public nb_planets: number) {
         for (let i = 0; i < nb_planets; i++) {
             this.planets.push(Point.new(new Vector(Math.random() * this.width, Math.random() * this.height)));
         }
     }
 
-    compute_force(planet: Point, other:Point): Vector {
+    compute_force(planet: Point, other: Point): Vector {
         // this is direction_vector * distance
         let diff: Vector = other.position.sub(planet.position);
 
         let distance: number = diff.norm();
         // to get X / distance^2, need to divide byt distance ^ 3
-        return diff.divIp( distance * distance * distance ).mulIp( G_CST * M * M);
+        return diff.divIp(distance * distance * distance).mulIp(G_CST * M * M);
     }
 
     update() {
@@ -96,7 +96,7 @@ class World {
             let sum_pull = new Vector(0, 0);
             for (let p2 of this.planets) {
                 // use the velocity Verlet method instead: http://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-                if(! p1.position.equal(p2.position)) {
+                if (!p1.position.equal(p2.position)) {
                     // pull_vector = direction_vector * m1*m2*G / (distance * distance)
                     sum_pull.addIp(this.compute_force(p1, p2));
                 }
@@ -109,11 +109,11 @@ class World {
 
 
 class DrawingBoard {
-    constructor(public world: World, public ctx: CanvasRenderingContext2D) {}
+    constructor(public world: World, public ctx: CanvasRenderingContext2D) { }
 
     drawPoint(imageData: ImageData, location: Vector) {
-        if( location.y >= 0 && location.y < imageData.height && location.x >= 0 && location.x < imageData.width) {
-            let offset: number = (location.y | 0) * (imageData.width*4) + (location.x | 0) * 4;
+        if (location.y >= 0 && location.y < imageData.height && location.x >= 0 && location.x < imageData.width) {
+            let offset: number = (location.y | 0) * (imageData.width * 4) + (location.x | 0) * 4;
             imageData.data[offset + 0] = 255;
             imageData.data[offset + 1] = 255;
             imageData.data[offset + 2] = 255;
@@ -128,7 +128,7 @@ class DrawingBoard {
         let imageData = ctx.getImageData(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 
         for (let p of world.planets) {
-            this.drawPoint( imageData, new Vector(p.position.x, p.position.y) );
+            this.drawPoint(imageData, new Vector(p.position.x, p.position.y));
         }
 
         ctx.putImageData(imageData, 0, 0);
@@ -152,9 +152,9 @@ let world = new World(WIDTH, HEIGHT, NB_PLANETS);
 let drawingBoard = new DrawingBoard(world, ctx);
 
 let counter = 0
-setInterval( () => {
+setInterval(() => {
     world.update();
     drawingBoard.draw();
     $message.innerHTML = "Frame: " + counter;
-    counter ++;
+    counter++;
 }, 500);
