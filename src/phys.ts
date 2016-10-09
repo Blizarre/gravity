@@ -8,62 +8,14 @@ const NB_PLANETS = 10;
 const G_CST = 6.67e-11 //  N (Mm/kg)2;
 const M = 5.972e14; // a mass
 
+import Vector from "./Vector";
 
 class Point {
     constructor(public position: Vector, public velocity: Vector = new Vector(0, 0), public halfAcceleration: Vector = new Vector(0, 0)) { }
     static new(position: Vector) { return new Point(position, new Vector(0, 0), new Vector(0, 0)); }
 }
 
-class Vector {
-    constructor(public x: number, public y: number) { }
-    add(other: Vector): Vector {
-        return new Vector(this.x + other.x, this.y + other.y);
-    }
-    addIp(other: Vector): Vector {
-        this.x += other.x;
-        this.y += other.y;
-        return this;
-    }
 
-    equal(other: Vector): boolean {
-        return this.x == other.x && this.y == other.y;
-    }
-
-    sub(other: Vector): Vector {
-        return new Vector(this.x - other.x, this.y - other.y);
-    }
-    subIp(other: Vector): Vector {
-        this.x -= other.x;
-        this.y -= other.y;
-        return this;
-    }
-
-    div(other: number): Vector {
-        return new Vector(this.x / other, this.y / other);
-    }
-    divIp(other: number): Vector {
-        this.x /= other;
-        this.y /= other;
-        return this;
-    }
-
-    norm(): number {
-        return Math.sqrt(this.normSquare());
-    }
-
-    normSquare(): number {
-        return this.x * this.x + this.y * this.y;
-    }
-
-    mul(other: number): Vector {
-        return new Vector(this.x * other, this.y * other);
-    }
-    mulIp(other: number): Vector {
-        this.x *= other;
-        this.y *= other;
-        return this;
-    }
-}
 
 
 class World {
