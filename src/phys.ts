@@ -82,12 +82,14 @@ class World {
                     sum_forces.addIp(this.compute_force(p1, p2));
                 }
             }
-            let newhalfAcceleration = sum_forces.div(2 * M);
+            // newAcceleration = sum_forces / M
+            let newacceleration = sum_forces.div(p1.mass);
+            // velocity +=
             p1.velocity.addIp(
-                // timestep * (accelerationv + newAcceleration) / 2
-                p1.halfAcceleration.add(newhalfAcceleration).mul(timestep)
+                // timestep * (acceleration + newAcceleration) / 2
+                p1.acceleration.add(newacceleration).div(2).mul(timestep)
             );
-            p1.halfAcceleration = newhalfAcceleration;
+            p1.acceleration = newacceleration;
         }
     }
 }
