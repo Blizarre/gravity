@@ -7,7 +7,7 @@ const NB_PLANETS = 10;
 
 const G_CST = 6.67e-11 //  N.(m/kg)2;
 const DENSITY = 900000000; // kg / m^3
-let RESOLUTION = 40000; // m / pixel
+const DEFAULT_RESOLUTION = 40000; // m / pixel
 
 import Vector from "./Vector";
 
@@ -31,24 +31,23 @@ class World {
     planets: Point[] = [];
 
     constructor(public width: number, public height: number, public nb_planets: number) {
-        let center: Vector = new Vector(width / 2 * RESOLUTION, height / 2 * RESOLUTION);
         // Sun 1
         this.planets.push( new Point(
-            center.add(new Vector(0, 5000000)),
+            new Vector(0, 5000000),
             1000000,
             new Vector(100000, 0)));
 
         // Sun 2
         this.planets.push( new Point(
-            center.add(new Vector(0, -5000000)),
+            new Vector(0, -5000000),
             1000000,
             new Vector(-100000, 0)));
 
         for(let i = 0; i <  nb_planets; i++) {
             this.planets.push( new Point(
-                center.add(Vector.random(5500000, 5500000)),
+                Vector.random(5500000, 5500000),
                 Math.random() * 100000,
-                new Vector(500000, 0)));
+                Vector.random(0, 500000)));
         }
     }
 
@@ -101,7 +100,12 @@ class World {
 
 
 class DrawingBoard {
-    constructor(public ctx: CanvasRenderingContext2D) { }
+    offset:Vector;
+    resolution:number;
+    constructor(public ctx: CanvasRenderingContext2D) {
+        this.resolution = DEFAULT_RESOLUTION;
+        this.offset = new Vector(- ctx.canvas.clientWidth * this.resolution / 2, - ctx.canvas.clientHeight * this.resolution / 2)
+    }
 
     drawPoint(imageData: ImageData, location: Vector) {
         if (location.y >= 0 && location.y < imageData.height && location.x >= 0 && location.x < imageData.width) {
@@ -116,24 +120,24 @@ class DrawingBoard {
     draw(planets: Point[], debug:boolean) {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
-
         for (let p of planets) {
+            let relativePosition = p.position.sub(this.offset).divIp(this.resolution);
             ctx.beginPath();
             ctx.strokeStyle = "white";
-            ctx.arc(p.position.x / RESOLUTION, p.position.y / RESOLUTION, p.radius / RESOLUTION, 0, Math.PI*2, true);
+            ctx.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
             ctx.stroke();
 
             if(debug) {
                 ctx.beginPath();
                 ctx.strokeStyle = "blue";
-                ctx.moveTo(p.position.x / RESOLUTION, p.position.y / RESOLUTION);
-                ctx.lineTo(p.position.x / RESOLUTION + p.velocity.x / RESOLUTION, p.position.y / RESOLUTION + p.velocity.y / RESOLUTION);
+                ctx.moveTo(relativePosition.x, relativePosition.y);
+                ctx.lineTo(relativePosition.x + p.velocity.x / this.resolution, relativePosition.y + p.velocity.y / this.resolution);
                 ctx.stroke();
 
                 ctx.beginPath();
                 ctx.strokeStyle = "yellow";
-                ctx.moveTo(p.position.x / RESOLUTION, p.position.y / RESOLUTION);
-                ctx.lineTo(p.position.x / RESOLUTION + p.acceleration.x / RESOLUTION, p.position.y / RESOLUTION + p.acceleration.y / RESOLUTION);
+                ctx.moveTo(relativePosition.x, relativePosition.y);
+                ctx.lineTo(relativePosition.x + p.acceleration.x / this.resolution, relativePosition.y + p.acceleration.y / this.resolution);
                 ctx.stroke();
             }
         }
@@ -150,11 +154,6 @@ $message.style.font = "sans-serif";
 $canv.width = WIDTH;
 $canv.height = HEIGHT;
 
-document.onkeypress = (event: KeyboardEvent) => {
-    if(event.key == "-") { RESOLUTION /= 10 ; }
-    if(event.key == "+") { RESOLUTION *= 10 ; }
-    if(event.key == "d") { debug != debug ; }
-}
 
 document.body.appendChild($canv);
 document.body.appendChild($message);
@@ -163,6 +162,13 @@ let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
 
 let world = new World(WIDTH, HEIGHT, NB_PLANETS);
 let drawingBoard = new DrawingBoard(ctx);
+
+document.onkeypress = (event: KeyboardEvent) => {
+    if(event.key == "-") { drawingBoard.resolution /= 10 ; }
+    if(event.key == "+") { drawingBoard.resolution *= 10 ; }
+    if(event.key == "d") { debug != debug ; }
+}
+
 
 let time = 0
 setInterval(() => {
