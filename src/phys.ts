@@ -76,8 +76,13 @@ class World {
         for (let p1 of this.planets) {
             let sum_forces = new Vector(0, 0);
             for (let p2 of this.planets) {
+                if(p1 == p2) {
+                    continue;
+                // collision: FIXME: might miss if tow elements are very very fast
+                } else if (p1.position.sub(p2.position).norm() < p1.radius + p2.radius) {
+                    continue;
                 // use the velocity Verlet method: http://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
-                if (!p1.position.equal(p2.position)) {
+                } else {
                     // pull_vector = direction_vector * m1*m2*G / (distance * distance)
                     sum_forces.addIp(this.compute_force(p1, p2));
                 }
