@@ -5,14 +5,22 @@ const NB_PLANETS = 10;
 //const G_CST = 6.67e-11 //  N (Mm/kg)2;
 //const M = 5.972e24; // earth mass
 
-const G_CST = 6.67e-11 //  N (Mm/kg)2;
-const M = 5.972e14; // a mass
+const G_CST = 6.67e-11 //  N.(m/kg)2;
+const DENSITY = 900000000; // kg / m^3
+let RESOLUTION = 40000; // m / pixel
 
 import Vector from "./Vector";
 
 class Point {
-    constructor(public position: Vector, public velocity: Vector = new Vector(0, 0), public halfAcceleration: Vector = new Vector(0, 0)) { }
-    static new(position: Vector) { return new Point(position, new Vector(0, 0), new Vector(0, 0)); }
+    mass: number;
+
+    constructor(public position: Vector, public radius:number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0)) {
+        // Mass is volume * Density
+        this.mass = (4 / 3) * Math.PI * radius * radius * radius * DENSITY;
+    }
+
+    static new(position: Vector, radius: number, velocity:Vector) {
+        return new Point(position, radius, velocity, new Vector(0, 0)); }
 }
 
 
@@ -29,12 +37,13 @@ class World {
     }
 
     compute_force(planet: Point, other: Point): Vector {
-        // this is direction_vector * distance
+        // this is direction * distance
         let diff: Vector = other.position.sub(planet.position);
 
         let distance: number = diff.norm();
-        // to get X / distance^2, need to divide byt distance ^ 3
-        return diff.divIp(distance * distance * distance).mulIp(G_CST * M * M);
+        let direction: Vector = diff.div(distance);
+        // force = G * M1 * M2 / (distance ^ 2)
+        return direction.mulIp(G_CST * planet.mass * other.mass).divIp(distance * distance);
     }
 
     update(timestep) {
@@ -42,7 +51,7 @@ class World {
         for (let p of this.planets) {
             p.position.addIp(
                 // (velocity + acceleration * timestep / 2) * timestep
-                p.velocity.add(p.halfAcceleration.mul(timestep)).mul(timestep)
+                p.velocity.add(p.acceleration.mul(timestep).div(2)).mul(timestep)
             );
         }
 
