@@ -101,7 +101,7 @@ class World {
 
 
 class DrawingBoard {
-    constructor(public world: World, public ctx: CanvasRenderingContext2D) { }
+    constructor(public ctx: CanvasRenderingContext2D) { }
 
     drawPoint(imageData: ImageData, location: Vector) {
         if (location.y >= 0 && location.y < imageData.height && location.x >= 0 && location.x < imageData.width) {
@@ -113,17 +113,30 @@ class DrawingBoard {
         }
     }
 
-    draw() {
+    draw(planets: Point[], debug:boolean) {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
 
-        let imageData = ctx.getImageData(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+        for (let p of planets) {
+            ctx.beginPath();
+            ctx.strokeStyle = "white";
+            ctx.arc(p.position.x / RESOLUTION, p.position.y / RESOLUTION, p.radius / RESOLUTION, 0, Math.PI*2, true);
+            ctx.stroke();
 
-        for (let p of world.planets) {
-            this.drawPoint(imageData, new Vector(p.position.x, p.position.y));
+            if(debug) {
+                ctx.beginPath();
+                ctx.strokeStyle = "blue";
+                ctx.moveTo(p.position.x / RESOLUTION, p.position.y / RESOLUTION);
+                ctx.lineTo(p.position.x / RESOLUTION + p.velocity.x / RESOLUTION, p.position.y / RESOLUTION + p.velocity.y / RESOLUTION);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.strokeStyle = "yellow";
+                ctx.moveTo(p.position.x / RESOLUTION, p.position.y / RESOLUTION);
+                ctx.lineTo(p.position.x / RESOLUTION + p.acceleration.x / RESOLUTION, p.position.y / RESOLUTION + p.acceleration.y / RESOLUTION);
+                ctx.stroke();
+            }
         }
-
-        ctx.putImageData(imageData, 0, 0);
     }
 }
 
@@ -131,9 +144,17 @@ class DrawingBoard {
 
 let $canv = document.createElement("canvas");
 let $message = document.createElement("p");
+let debug = true;
+$message.style.font = "sans-serif";
 
 $canv.width = WIDTH;
 $canv.height = HEIGHT;
+
+document.onkeypress = (event: KeyboardEvent) => {
+    if(event.key == "-") { RESOLUTION /= 10 ; }
+    if(event.key == "+") { RESOLUTION *= 10 ; }
+    if(event.key == "d") { debug != debug ; }
+}
 
 document.body.appendChild($canv);
 document.body.appendChild($message);
@@ -141,12 +162,15 @@ document.body.appendChild($message);
 let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
 
 let world = new World(WIDTH, HEIGHT, NB_PLANETS);
-let drawingBoard = new DrawingBoard(world, ctx);
+let drawingBoard = new DrawingBoard(ctx);
 
 let time = 0
 setInterval(() => {
+    let t1 = new Date();
     world.update(TIMESTEP);
-    drawingBoard.draw();
-    $message.textContent = "time: " + time + "s.";
+    drawingBoard.draw(world.planets, debug);
+    let t2 = new Date();
+
+    $message.textContent = "time: " + time.toFixed(2) + "s. (took " + (t2.getTime() - t1.getTime()) + "ms.)";
     time += TIMESTEP;
-}, 500);
+}, 1000 / 30);
