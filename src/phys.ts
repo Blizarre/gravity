@@ -31,10 +31,27 @@ class World {
     planets: Point[] = [];
 
     constructor(public width: number, public height: number, public nb_planets: number) {
-        for (let i = 0; i < nb_planets; i++) {
-            this.planets.push(Point.new(new Vector(Math.random() * this.width, Math.random() * this.height)));
+        let center: Vector = new Vector(width / 2 * RESOLUTION, height / 2 * RESOLUTION);
+        // Sun 1
+        this.planets.push( new Point(
+            center.add(new Vector(0, 5000000)),
+            1000000,
+            new Vector(100000, 0)));
+
+        // Sun 2
+        this.planets.push( new Point(
+            center.add(new Vector(0, -5000000)),
+            1000000,
+            new Vector(-100000, 0)));
+
+        for(let i = 0; i <  nb_planets; i++) {
+            this.planets.push( new Point(
+                center.add(Vector.random(5500000, 5500000)),
+                Math.random() * 100000,
+                new Vector(500000, 0)));
         }
     }
+
 
     compute_force(planet: Point, other: Point): Vector {
         // this is direction * distance
