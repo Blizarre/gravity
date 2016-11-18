@@ -110,7 +110,15 @@ class DrawingBoard {
     resolution:number;
     constructor(public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
-        this.offset = new Vector(- this.ctx.canvas.clientWidth * this.resolution / 2, - this.ctx.canvas.clientHeight * this.resolution / 2)
+        this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
+        console.log( this.offset.x);
+        console.log(this.ctx.canvas.clientWidth);
+        console.log(this.resolution);
+    }
+
+    scale(factor) {
+        this.resolution *= factor;
+        this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
     }
 
     draw(planets: Point[], debug:boolean) {
@@ -161,8 +169,8 @@ window.onload = function() {
     document.body.appendChild($message);
 
     document.onkeypress = (event: KeyboardEvent) => {
-        if(event.key == "-") { drawingBoard.resolution /= 2 ; }
-        if(event.key == "+") { drawingBoard.resolution *= 2 ; }
+        if(event.key == "-") { drawingBoard.scale(0.5);}
+        if(event.key == "+") { drawingBoard.scale(2); }
         if(event.key == "d") { debug = !debug ; }
     }
 
