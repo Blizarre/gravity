@@ -170,9 +170,9 @@ let world = new World(WIDTH, HEIGHT, NB_PLANETS);
 let drawingBoard = new DrawingBoard(ctx);
 
 document.onkeypress = (event: KeyboardEvent) => {
-    if(event.key == "-") { drawingBoard.resolution /= 10 ; }
-    if(event.key == "+") { drawingBoard.resolution *= 10 ; }
-    if(event.key == "d") { debug != debug ; }
+    if(event.key == "-") { drawingBoard.resolution /= 2 ; }
+    if(event.key == "+") { drawingBoard.resolution *= 2 ; }
+    if(event.key == "d") { debug = !debug ; }
 }
 
 
