@@ -14,13 +14,13 @@ import Vector from "./Vector";
 class Point {
     mass: number;
 
-    constructor(public position: Vector, public radius:number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0)) {
+    constructor(public position: Vector, public radius:number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0), public color) {
         // Mass is volume * Density
         this.mass = (4 / 3) * Math.PI * radius * radius * radius * DENSITY;
     }
 
     static new(position: Vector, radius: number, velocity:Vector) {
-        return new Point(position, radius, velocity, new Vector(0, 0)); }
+        return new Point(position, radius, velocity, new Vector(0, 0), "white"); }
 }
 
 
@@ -35,19 +35,25 @@ class World {
         this.planets.push( new Point(
             new Vector(0, 5000000),
             1000000,
-            new Vector(100000, 0)));
+            new Vector(100000, 0),
+            new Vector(0, 0),
+            "red"));
 
         // Sun 2
         this.planets.push( new Point(
             new Vector(0, -5000000),
             1000000,
-            new Vector(-100000, 0)));
+            new Vector(-100000, 0),
+            new Vector(0, 0),
+            "yellow"));
 
         for(let i = 0; i <  nb_planets; i++) {
             this.planets.push( new Point(
                 Vector.random(5500000, 5500000),
                 Math.random() * 100000,
-                Vector.random(0, 500000)));
+                Vector.random(0, 500000),
+                new Vector(0, 0),
+                "blue"));
         }
     }
 
@@ -123,9 +129,9 @@ class DrawingBoard {
         for (let p of planets) {
             let relativePosition = p.position.sub(this.offset).divIp(this.resolution);
             ctx.beginPath();
-            ctx.strokeStyle = "white";
+            ctx.fillStyle = p.color;
             ctx.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
-            ctx.stroke();
+            ctx.fill();
 
             if(debug) {
                 ctx.beginPath();
