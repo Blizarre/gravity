@@ -110,7 +110,7 @@ class DrawingBoard {
     resolution:number;
     constructor(public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
-        this.offset = new Vector(- ctx.canvas.clientWidth * this.resolution / 2, - ctx.canvas.clientHeight * this.resolution / 2)
+        this.offset = new Vector(- this.ctx.canvas.clientWidth * this.resolution / 2, - this.ctx.canvas.clientHeight * this.resolution / 2)
     }
 
     drawPoint(imageData: ImageData, location: Vector) {
@@ -124,27 +124,27 @@ class DrawingBoard {
     }
 
     draw(planets: Point[], debug:boolean) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+        this.ctx.fillStyle = "black";
+        this.ctx.fillRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight);
         for (let p of planets) {
             let relativePosition = p.position.sub(this.offset).divIp(this.resolution);
-            ctx.beginPath();
-            ctx.fillStyle = p.color;
-            ctx.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
-            ctx.fill();
+            this.ctx.beginPath();
+            this.ctx.fillStyle = p.color;
+            this.ctx.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
+            this.ctx.fill();
 
             if(debug) {
-                ctx.beginPath();
-                ctx.strokeStyle = "blue";
-                ctx.moveTo(relativePosition.x, relativePosition.y);
-                ctx.lineTo(relativePosition.x + p.velocity.x / this.resolution, relativePosition.y + p.velocity.y / this.resolution);
-                ctx.stroke();
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = "blue";
+                this.ctx.moveTo(relativePosition.x, relativePosition.y);
+                this.ctx.lineTo(relativePosition.x + p.velocity.x / this.resolution, relativePosition.y + p.velocity.y / this.resolution);
+                this.ctx.stroke();
 
-                ctx.beginPath();
-                ctx.strokeStyle = "yellow";
-                ctx.moveTo(relativePosition.x, relativePosition.y);
-                ctx.lineTo(relativePosition.x + p.acceleration.x / this.resolution, relativePosition.y + p.acceleration.y / this.resolution);
-                ctx.stroke();
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = "yellow";
+                this.ctx.moveTo(relativePosition.x, relativePosition.y);
+                this.ctx.lineTo(relativePosition.x + p.acceleration.x / this.resolution, relativePosition.y + p.acceleration.y / this.resolution);
+                this.ctx.stroke();
             }
         }
     }
@@ -154,35 +154,36 @@ class DrawingBoard {
 
 let $canv = document.createElement("canvas");
 let $message = document.createElement("p");
-let debug = true;
 $message.style.font = "sans-serif";
 
 $canv.width = WIDTH;
 $canv.height = HEIGHT;
 
 
-document.body.appendChild($canv);
-document.body.appendChild($message);
+window.onload = function() {
+    let debug = true;
+    let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
+    let world = new World(WIDTH, HEIGHT, NB_PLANETS);
+    let drawingBoard = new DrawingBoard(ctx);
 
-let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
+    document.body.appendChild($canv);
+    document.body.appendChild($message);
 
-let world = new World(WIDTH, HEIGHT, NB_PLANETS);
-let drawingBoard = new DrawingBoard(ctx);
+    document.onkeypress = (event: KeyboardEvent) => {
+        if(event.key == "-") { drawingBoard.resolution /= 2 ; }
+        if(event.key == "+") { drawingBoard.resolution *= 2 ; }
+        if(event.key == "d") { debug = !debug ; }
+    }
 
-document.onkeypress = (event: KeyboardEvent) => {
-    if(event.key == "-") { drawingBoard.resolution /= 2 ; }
-    if(event.key == "+") { drawingBoard.resolution *= 2 ; }
-    if(event.key == "d") { debug = !debug ; }
+
+    let time = 0
+    setInterval(() => {
+        let t1 = new Date();
+        world.update(TIMESTEP);
+        drawingBoard.draw(world.planets, debug);
+        let t2 = new Date();
+
+        $message.textContent = "time: " + time.toFixed(2) + "s. (took " + (t2.getTime() - t1.getTime()) + "ms.)";
+        time += TIMESTEP;
+    }, 1000 / 30);
 }
-
-
-let time = 0
-setInterval(() => {
-    let t1 = new Date();
-    world.update(TIMESTEP);
-    drawingBoard.draw(world.planets, debug);
-    let t2 = new Date();
-
-    $message.textContent = "time: " + time.toFixed(2) + "s. (took " + (t2.getTime() - t1.getTime()) + "ms.)";
-    time += TIMESTEP;
-}, 1000 / 30);
