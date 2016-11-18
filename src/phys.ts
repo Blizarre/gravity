@@ -114,27 +114,28 @@ class DrawingBoard {
     }
 
     draw(planets: Point[], debug:boolean) {
-        this.ctx.fillStyle = "black";
-        this.ctx.fillRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight);
+        let ct = this.ctx;
+        ct.fillStyle = "black";
+        ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
         for (let p of planets) {
             let relativePosition = p.position.sub(this.offset).divIp(this.resolution);
-            this.ctx.beginPath();
-            this.ctx.fillStyle = p.color;
-            this.ctx.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
-            this.ctx.fill();
+            ct.beginPath();
+            ct.fillStyle = p.color;
+            ct.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
+            ct.fill();
 
             if(debug) {
-                this.ctx.beginPath();
-                this.ctx.strokeStyle = "blue";
-                this.ctx.moveTo(relativePosition.x, relativePosition.y);
-                this.ctx.lineTo(relativePosition.x + p.velocity.x / this.resolution, relativePosition.y + p.velocity.y / this.resolution);
-                this.ctx.stroke();
+                ct.beginPath();
+                ct.strokeStyle = "blue";
+                ct.moveTo(relativePosition.x, relativePosition.y);
+                ct.lineTo(relativePosition.x + p.velocity.x / this.resolution, relativePosition.y + p.velocity.y / this.resolution);
+                ct.stroke();
 
-                this.ctx.beginPath();
-                this.ctx.strokeStyle = "yellow";
-                this.ctx.moveTo(relativePosition.x, relativePosition.y);
-                this.ctx.lineTo(relativePosition.x + p.acceleration.x / this.resolution, relativePosition.y + p.acceleration.y / this.resolution);
-                this.ctx.stroke();
+                ct.beginPath();
+                ct.strokeStyle = "yellow";
+                ct.moveTo(relativePosition.x, relativePosition.y);
+                ct.lineTo(relativePosition.x + p.acceleration.x / this.resolution, relativePosition.y + p.acceleration.y / this.resolution);
+                ct.stroke();
             }
         }
     }
