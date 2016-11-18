@@ -2,8 +2,6 @@ let WIDTH = 640;
 let HEIGHT = 480;
 const TIMESTEP = 0.5
 const NB_PLANETS = 10;
-//const G_CST = 6.67e-11 //  N (Mm/kg)2;
-//const M = 5.972e24; // earth mass
 
 const G_CST = 6.67e-11 //  N.(m/kg)2;
 const DENSITY = 900000000; // kg / m^3
@@ -20,11 +18,9 @@ class Point {
     }
 
     static new(position: Vector, radius: number, velocity:Vector) {
-        return new Point(position, radius, velocity, new Vector(0, 0), "white"); }
+        return new Point(position, radius, velocity, new Vector(0, 0), "white"); 
+    }
 }
-
-
-
 
 class World {
 
@@ -106,14 +102,13 @@ class World {
 
 
 class DrawingBoard {
+
     offset:Vector;
     resolution:number;
+    
     constructor(public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
         this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
-        console.log( this.offset.x);
-        console.log(this.ctx.canvas.clientWidth);
-        console.log(this.resolution);
     }
 
     scale(factor) {
