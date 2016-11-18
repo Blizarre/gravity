@@ -1,5 +1,5 @@
-let WIDTH = 640;
-let HEIGHT = 480;
+let WIDTH = 1000;
+let HEIGHT = 600;
 const TIMESTEP = 0.5
 const NB_PLANETS = 10;
 
