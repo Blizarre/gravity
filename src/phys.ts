@@ -113,16 +113,6 @@ class DrawingBoard {
         this.offset = new Vector(- this.ctx.canvas.clientWidth * this.resolution / 2, - this.ctx.canvas.clientHeight * this.resolution / 2)
     }
 
-    drawPoint(imageData: ImageData, location: Vector) {
-        if (location.y >= 0 && location.y < imageData.height && location.x >= 0 && location.x < imageData.width) {
-            let offset: number = (location.y | 0) * (imageData.width * 4) + (location.x | 0) * 4;
-            imageData.data[offset + 0] = 255;
-            imageData.data[offset + 1] = 255;
-            imageData.data[offset + 2] = 255;
-            imageData.data[offset + 3] = 255;
-        }
-    }
-
     draw(planets: Point[], debug:boolean) {
         this.ctx.fillStyle = "black";
         this.ctx.fillRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight);
