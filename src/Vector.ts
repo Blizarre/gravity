@@ -4,7 +4,7 @@ class Vector {
         return new Vector(this.x + other.x, this.y + other.y);
     }
 
-    static random(span_x:number, span_y: number): Vector {
+    static random(span_x: number, span_y: number): Vector {
         return new Vector(
             (Math.random() - 0.5) * span_x,
             (Math.random() - 0.5) * span_y,

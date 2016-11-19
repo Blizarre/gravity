@@ -12,13 +12,13 @@ import Vector from "./Vector";
 class Point {
     mass: number;
 
-    constructor(public position: Vector, public radius:number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0), public color) {
+    constructor(public position: Vector, public radius: number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0), public color) {
         // Mass is volume * Density
         this.mass = (4 / 3) * Math.PI * radius * radius * radius * DENSITY;
     }
 
-    static new(position: Vector, radius: number, velocity:Vector) {
-        return new Point(position, radius, velocity, new Vector(0, 0), "white"); 
+    static new(position: Vector, radius: number, velocity: Vector) {
+        return new Point(position, radius, velocity, new Vector(0, 0), "white");
     }
 }
 
@@ -28,7 +28,7 @@ class World {
 
     constructor(public width: number, public height: number, public nb_planets: number) {
         // Sun 1
-        this.planets.push( new Point(
+        this.planets.push(new Point(
             new Vector(0, 5000000),
             1000000,
             new Vector(100000, 0),
@@ -36,15 +36,15 @@ class World {
             "red"));
 
         // Sun 2
-        this.planets.push( new Point(
+        this.planets.push(new Point(
             new Vector(0, -5000000),
             1000000,
             new Vector(-100000, 0),
             new Vector(0, 0),
             "yellow"));
 
-        for(let i = 0; i <  nb_planets; i++) {
-            this.planets.push( new Point(
+        for (let i = 0; i < nb_planets; i++) {
+            this.planets.push(new Point(
                 Vector.random(5500000, 5500000),
                 Math.random() * 100000,
                 Vector.random(0, 500000),
@@ -77,12 +77,12 @@ class World {
         for (let p1 of this.planets) {
             let sum_forces = new Vector(0, 0);
             for (let p2 of this.planets) {
-                if(p1 == p2) {
+                if (p1 == p2) {
                     continue;
-                // collision: FIXME: might miss if tow elements are very very fast
+                    // collision: FIXME: might miss if tow elements are very very fast
                 } else if (p1.position.sub(p2.position).norm() < p1.radius + p2.radius) {
                     continue;
-                // use the velocity Verlet method: http://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
+                    // use the velocity Verlet method: http://gamedev.stackexchange.com/questions/15708/how-can-i-implement-gravity
                 } else {
                     // pull_vector = direction_vector * m1*m2*G / (distance * distance)
                     sum_forces.addIp(this.compute_force(p1, p2));
@@ -103,9 +103,9 @@ class World {
 
 class DrawingBoard {
 
-    offset:Vector;
-    resolution:number;
-    
+    offset: Vector;
+    resolution: number;
+
     constructor(public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
         this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
@@ -116,7 +116,7 @@ class DrawingBoard {
         this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
     }
 
-    draw(planets: Point[], debug:boolean) {
+    draw(planets: Point[], debug: boolean) {
         let ct = this.ctx;
         ct.fillStyle = "black";
         ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
@@ -124,10 +124,10 @@ class DrawingBoard {
             let relativePosition = p.position.sub(this.offset).divIp(this.resolution);
             ct.beginPath();
             ct.fillStyle = p.color;
-            ct.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI*2, true);
+            ct.arc(relativePosition.x, relativePosition.y, p.radius / this.resolution, 0, Math.PI * 2, true);
             ct.fill();
 
-            if(debug) {
+            if (debug) {
                 ct.beginPath();
                 ct.strokeStyle = "blue";
                 ct.moveTo(relativePosition.x, relativePosition.y);
@@ -164,9 +164,9 @@ window.onload = function() {
     document.body.appendChild($message);
 
     document.onkeypress = (event: KeyboardEvent) => {
-        if(event.key == "-") { drawingBoard.scale(0.5);}
-        if(event.key == "+") { drawingBoard.scale(2); }
-        if(event.key == "d") { debug = !debug ; }
+        if (event.key == "-") { drawingBoard.scale(0.5); }
+        if (event.key == "+") { drawingBoard.scale(2); }
+        if (event.key == "d") { debug = !debug; }
     }
 
 
