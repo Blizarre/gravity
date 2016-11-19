@@ -9,7 +9,7 @@ const DEFAULT_RESOLUTION = 40000; // m / pixel
 
 import Vector from "./Vector";
 
-class Point {
+class Planet {
     mass: number;
 
     constructor(public position: Vector, public radius: number, public velocity: Vector = new Vector(0, 0), public acceleration: Vector = new Vector(0, 0), public color) {
@@ -18,17 +18,17 @@ class Point {
     }
 
     static new(position: Vector, radius: number, velocity: Vector) {
-        return new Point(position, radius, velocity, new Vector(0, 0), "white");
+        return new Planet(position, radius, velocity, new Vector(0, 0), "white");
     }
 }
 
 class World {
 
-    planets: Point[] = [];
+    planets: Planet[] = [];
 
     constructor(public width: number, public height: number, public nb_planets: number) {
         // Sun 1
-        this.planets.push(new Point(
+        this.planets.push(new Planet(
             new Vector(0, 5000000),
             1000000,
             new Vector(100000, 0),
@@ -36,7 +36,7 @@ class World {
             "red"));
 
         // Sun 2
-        this.planets.push(new Point(
+        this.planets.push(new Planet(
             new Vector(0, -5000000),
             1000000,
             new Vector(-100000, 0),
@@ -44,7 +44,7 @@ class World {
             "yellow"));
 
         for (let i = 0; i < nb_planets; i++) {
-            this.planets.push(new Point(
+            this.planets.push(new Planet(
                 Vector.random(5500000, 5500000),
                 Math.random() * 100000,
                 Vector.random(0, 500000),
@@ -54,7 +54,7 @@ class World {
     }
 
 
-    compute_force(planet: Point, other: Point): Vector {
+    compute_force(planet: Planet, other: Planet): Vector {
         // this is direction * distance
         let diff: Vector = other.position.sub(planet.position);
 
@@ -116,7 +116,7 @@ class DrawingBoard {
         this.offset = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
     }
 
-    draw(planets: Point[], debug: boolean) {
+    draw(planets: Planet[], debug: boolean) {
         let ct = this.ctx;
         ct.fillStyle = "black";
         ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
