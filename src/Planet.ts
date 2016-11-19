@@ -1,5 +1,5 @@
 import Vector from "./Vector";
-import DENSITY from "./phys";
+import { DENSITY } from "./constants";
 
 class Planet {
     mass: number;

@@ -3,10 +3,8 @@ let HEIGHT = 600;
 const TIMESTEP = 0.5
 const NB_PLANETS = 10;
 
-const G_CST = 6.67e-11 //  N.(m/kg)2;
-const DENSITY = 900000000; // kg / m^3
-const DEFAULT_RESOLUTION = 40000; // m / pixel
 
+import { G_CST, DEFAULT_RESOLUTION } from "./constants";
 import Vector from "./Vector";
 import Planet from "./Planet";
 
@@ -158,6 +156,10 @@ window.onload = function() {
         if (event.key == "d") { debug = !debug; }
     }
 
+    document.onclick = function(event) {
+
+    }
+
 
     let time = 0
     setInterval(() => {
@@ -171,4 +173,3 @@ window.onload = function() {
     }, 1000 / 30);
 }
 
-export default DENSITY;

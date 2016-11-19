@@ -1,0 +1,27 @@
+{
+  "name": "gravity",
+  "version": "0.1.0",
+  "description": "Spatial gravity simulator",
+  "dependencies": {},
+  "devDependencies": {
+    "html-webpack-plugin": "^2.24.1",
+    "ts-loader": "^1.2.2",
+    "typescript": "^2.0.10",
+    "typescript-formatter": "^4.0.1",
+    "webpack": "^1.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blizarre/gravity.git"
+  },
+  "license": "GPL-3.0",
+  "keywords": [
+    "gravity",
+    "simulation"
+  ],
+  "author": "Simon Marache-Francisco",
+  "bugs": {
+    "url": "https://github.com/Blizarre/gravity/issues"
+  },
+  "homepage": "https://github.com/Blizarre/gravity#readme"
+}
