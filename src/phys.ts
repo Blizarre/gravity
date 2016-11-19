@@ -164,8 +164,8 @@ window.onload = function() {
     document.body.appendChild($message);
 
     document.onkeypress = (event: KeyboardEvent) => {
-        if (event.key == "-") { drawingBoard.scale(0.5); }
-        if (event.key == "+") { drawingBoard.scale(2); }
+        if (event.key == "+") { drawingBoard.scale(0.5); }
+        if (event.key == "-") { drawingBoard.scale(2); }
         if (event.key == "d") { debug = !debug; }
     }
 
