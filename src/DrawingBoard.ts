@@ -9,7 +9,7 @@ class DrawingBoard {
 
     constructor(public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
-        this.viewPortCenter = new Vector(- WIDTH * this.resolution / 2, - HEIGHT * this.resolution / 2)
+        this.viewPortCenter = new Vector(0, 0);
     }
 
     scale(factor) {
@@ -21,11 +21,12 @@ class DrawingBoard {
     }
 
     draw(planets: Planet[], debug: boolean, renderTime: number) {
+        let topLeftCorner = this.viewPortCenter.sub(new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution));
         let ct = this.ctx;
         ct.fillStyle = "black";
         ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
         for (let p of planets) {
-            let relativePosition = p.position.sub(this.viewPortCenter).divIp(this.resolution);
+            let relativePosition = p.position.sub(topLeftCorner).divIp(this.resolution);
 
             // Draw PLanet
             ct.beginPath();

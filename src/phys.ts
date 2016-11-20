@@ -105,10 +105,26 @@ window.onload = function() {
         if (event.key == "d") { debug = !debug; }
     }
 
-    document.onclick = function(event) {
+    document.onkeydown = (event: KeyboardEvent) => {
+        const LEFT_ARROW = 37;
+        const RIGHT_ARROW = 39;
+        const UP_ARROW = 38;
+        const DOWN_ARROW = 40;
 
+        let charCode = (event.which) ? event.which : event.keyCode
+        if(charCode == LEFT_ARROW) {
+                drawingBoard.move(-10, 0);
+        }
+        if(charCode == RIGHT_ARROW) {
+                drawingBoard.move(10, 0);
+        }
+        if(charCode == UP_ARROW) {
+                drawingBoard.move(0, -10);
+        }
+        if(charCode == DOWN_ARROW) {
+                drawingBoard.move(0, 10);
+        }
     }
-
 
     var lastTime = 0
     setInterval(() => {
