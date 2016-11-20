@@ -17,7 +17,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: 'My App',
+			title: 'Gravity',
 			filename: 'index.html'
 		})
     ]
