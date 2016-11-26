@@ -94,6 +94,7 @@ enum State { NONE, CENTER_SELECTED, RADIUS_SELECTED, VELOCITY_SELECTED }
 
 window.onload = function() {
     let debug = true;
+    let pause = false;
     let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
     let world = new World(WIDTH, HEIGHT, NB_PLANETS);
     let drawingBoard = new DrawingBoard(ctx);
@@ -106,6 +107,7 @@ window.onload = function() {
         if (event.key == "+") { drawingBoard.scale(0.5); }
         if (event.key == "-") { drawingBoard.scale(2); }
         if (event.key == "d") { debug = !debug; }
+        if (event.key == "p") { pause = !pause; }
     }
 
     $canv.onclick = (event: MouseEvent) => {
@@ -155,7 +157,9 @@ window.onload = function() {
     var lastTime = 0
     setInterval(() => {
         let t1 = new Date();
-        world.update(TIMESTEP);
+        if (!pause) {
+            world.update(TIMESTEP);
+        }
         // todo: create Debug structure with enable flag and infos
         drawingBoard.clear();
         drawingBoard.draw(world.planets, debug, lastTime);
