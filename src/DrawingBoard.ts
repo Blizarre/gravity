@@ -20,11 +20,15 @@ class DrawingBoard {
         this.viewPortCenter.addIp(new Vector(dx, dy).mulIp(this.resolution));
     }
 
-    draw(planets: Planet[], debug: boolean, renderTime: number) {
-        let topLeftCorner = this.viewPortCenter.sub(new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution));
+    clear() {
         let ct = this.ctx;
         ct.fillStyle = "black";
         ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
+    }
+
+    draw(planets: Planet[], debug: boolean, renderTime: number) {
+        let ct = this.ctx;
+        let topLeftCorner = this.viewPortCenter.sub(new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution));
         for (let p of planets) {
             let relativePosition = p.position.sub(topLeftCorner).divIp(this.resolution);
 

@@ -131,6 +131,7 @@ window.onload = function() {
         let t1 = new Date();
         world.update(TIMESTEP);
         // todo: create Debug structure with enable flag and infos
+        drawingBoard.clear();
         drawingBoard.draw(world.planets, debug, lastTime);
         let t2 = new Date();
 
