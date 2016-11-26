@@ -90,12 +90,15 @@ let $canv = document.createElement("canvas");
 $canv.width = WIDTH;
 $canv.height = HEIGHT;
 
+enum State { NONE, CENTER_SELECTED, RADIUS_SELECTED, VELOCITY_SELECTED }
 
 window.onload = function() {
     let debug = true;
     let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
     let world = new World(WIDTH, HEIGHT, NB_PLANETS);
     let drawingBoard = new DrawingBoard(ctx);
+    let state = State.NONE;
+    let new_planet: Planet;
 
     document.body.appendChild($canv);
 
@@ -103,6 +106,29 @@ window.onload = function() {
         if (event.key == "+") { drawingBoard.scale(0.5); }
         if (event.key == "-") { drawingBoard.scale(2); }
         if (event.key == "d") { debug = !debug; }
+    }
+
+    $canv.onclick = (event: MouseEvent) => {
+        // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
+        let rect = $canv.getBoundingClientRect();
+        let x = event.clientX - rect.left;
+        let y = event.clientY - rect.top;
+        console.log("(" + x + ", " + y + ")");
+        switch(state) {
+            case State.NONE:
+                state = State.CENTER_SELECTED;
+                //new_planet.position = (x + draw.upperleft) * resolution;
+            break;
+            case State.CENTER_SELECTED:
+                state = State.RADIUS_SELECTED;
+            break;
+            case State.RADIUS_SELECTED:
+                state = State.VELOCITY_SELECTED;
+            break;
+            case State.VELOCITY_SELECTED:
+                state = State.NONE;
+            break;
+        }
     }
 
     document.onkeydown = (event: KeyboardEvent) => {
