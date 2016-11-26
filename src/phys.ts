@@ -35,7 +35,7 @@ class World {
                 Math.random() * 100000,
                 Vector.random(0, 500000),
                 new Vector(0, 0),
-                "blue"));
+                "white"));
         }
     }
 
