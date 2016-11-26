@@ -112,17 +112,17 @@ window.onload = function() {
         const DOWN_ARROW = 40;
 
         let charCode = (event.which) ? event.which : event.keyCode
-        if(charCode == LEFT_ARROW) {
-                drawingBoard.move(-10, 0);
+        if (charCode == LEFT_ARROW) {
+            drawingBoard.move(-10, 0);
         }
-        if(charCode == RIGHT_ARROW) {
-                drawingBoard.move(10, 0);
+        if (charCode == RIGHT_ARROW) {
+            drawingBoard.move(10, 0);
         }
-        if(charCode == UP_ARROW) {
-                drawingBoard.move(0, -10);
+        if (charCode == UP_ARROW) {
+            drawingBoard.move(0, -10);
         }
-        if(charCode == DOWN_ARROW) {
-                drawingBoard.move(0, 10);
+        if (charCode == DOWN_ARROW) {
+            drawingBoard.move(0, 10);
         }
     }
 

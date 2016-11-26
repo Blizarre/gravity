@@ -39,8 +39,8 @@ class DrawingBoard {
                 ct.beginPath();
                 ct.strokeStyle = "white";
                 ct.lineWidth = 1;
-                ct.moveTo(relativePosition.x , relativePosition.y - 2);
-                ct.lineTo(relativePosition.x , relativePosition.y + 2);
+                ct.moveTo(relativePosition.x, relativePosition.y - 2);
+                ct.lineTo(relativePosition.x, relativePosition.y + 2);
                 ct.moveTo(relativePosition.x + 2, relativePosition.y);
                 ct.lineTo(relativePosition.x - 2, relativePosition.y);
                 ct.stroke();
@@ -64,7 +64,7 @@ class DrawingBoard {
 
             }
         }
-        if(debug) {
+        if (debug) {
             // Draw render time for the previous frame
             ct.fillStyle = "white";
             ct.font = "16px sans-serif";
