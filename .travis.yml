@@ -3,7 +3,8 @@ node_js: "6"
 script:
       - ./node_modules/.bin/webpack --output-path build
       - sudo -H python -m pip install s3cmd
-      - s3cmd sync --delete-removed -P -M -r build/ s3://marache.net-static/projects/gravity
+      - s3cmd sync --delete-removed -P -M -r build/ s3://marache.net-static/projects/gravity/
+      - s3cmd sync --delete-removed -P -M -r build/ s3://test.marache.net/projects/gravity/
 notifications:
     email:
         on_failure: always
