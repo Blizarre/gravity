@@ -73,7 +73,10 @@ class DrawingBoard {
             ct.fillStyle = "white";
             ct.font = "16px sans-serif";
             ct.fillText("render: " + renderTime + "ms.", 20, 20);
-            ct.fillText("[d] to disable", 20, 40);
+            ct.fillText("[d] toggle debug", 20, 40);
+            ct.fillText("[p] toggle pause", 20, 60);
+            ct.fillText("[+/-] zoom in-out", 20, 80);
+            ct.fillText("[←/→/↑/↓] move", 20, 100);
         }
     }
 }
