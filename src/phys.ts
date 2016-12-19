@@ -50,7 +50,7 @@ class World {
         return direction.mulIp(G_CST * planet.mass * other.mass).divIp(distance * distance);
     }
 
-    update(timestep) {
+    update(timestep: number) {
         // update the position vector
         for (let p of this.planets) {
             p.position.addIp(

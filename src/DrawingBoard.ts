@@ -12,11 +12,11 @@ class DrawingBoard {
         this.viewPortCenter = new Vector(0, 0);
     }
 
-    scale(factor) {
+    scale(factor: number) {
         this.resolution *= factor;
     }
 
-    move(dx, dy) {
+    move(dx: number, dy: number) {
         this.viewPortCenter.addIp(new Vector(dx, dy).mulIp(this.resolution));
     }
 
