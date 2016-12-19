@@ -1,7 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./src/phys.ts",
+    entry: "./src/main.ts",
     output: {
         filename: "bundle.js"
     },
