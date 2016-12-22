@@ -20,17 +20,32 @@ class DrawingBoard {
         this.viewPortCenter.addIp(new Vector(dx, dy).mulIp(this.resolution));
     }
 
+    pointToWorld(pixel_coord: Vector) {
+        return pixel_coord.mul(this.resolution).addIp(this.topLeftCorner())
+    }
+
+    worldToPoint(world_coord: Vector, topLeftCorner:Vector = undefined) {
+        let tlc = topLeftCorner == null ? this.topLeftCorner() : topLeftCorner
+        return world_coord.sub(tlc).divIp(this.resolution);
+    }
+
     clear() {
         let ct = this.ctx;
         ct.fillStyle = "black";
         ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
     }
 
+    topLeftCorner() {
+        return this.viewPortCenter.sub(
+            new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution)
+        );
+    }
+
+
     draw(planets: Planet[], debug: boolean, renderTime: number) {
         let ct = this.ctx;
-        let topLeftCorner = this.viewPortCenter.sub(new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution));
         for (let p of planets) {
-            let relativePosition = p.position.sub(topLeftCorner).divIp(this.resolution);
+            let relativePosition = this.worldToPoint(p.position);
 
             // Draw PLanet
             ct.beginPath();
