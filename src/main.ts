@@ -7,6 +7,14 @@ import Vector from "./Vector";
 import Planet from "./Planet";
 import DrawingBoard from "./DrawingBoard";
 
+function log(msg: string, param: any = undefined) {
+    if(param != null) {
+        console.log(msg.replace("{}", param + ''))
+    } else {
+        console.log(msg)
+    }
+    return param
+}
 
 class World {
 
@@ -115,11 +123,12 @@ window.onload = function() {
         let rect = $canv.getBoundingClientRect();
         let x = event.clientX - rect.left;
         let y = event.clientY - rect.top;
-        console.log("(" + x + ", " + y + ")");
+        log("(" + x + ", " + y + ")");
         switch(state) {
             case State.NONE:
                 state = State.CENTER_SELECTED;
-                //new_planet.position = (x + draw.upperleft) * resolution;
+                new_planet = new Planet(drawingBoard.pointToWorld(new Vector(x, y)), 1, new Vector(0, 0), new Vector(0, 0), "red");
+                log("New planet added at location {}", new_planet.position);
             break;
             case State.CENTER_SELECTED:
                 state = State.RADIUS_SELECTED;
@@ -163,6 +172,9 @@ window.onload = function() {
         // todo: create Debug structure with enable flag and infos
         drawingBoard.clear();
         drawingBoard.draw(world.planets, debug, lastTime);
+        if(new_planet != null) {
+            drawingBoard.draw([new_planet], false, lastTime);
+        }
         let t2 = new Date();
 
         lastTime = t2.getTime() - t1.getTime();
