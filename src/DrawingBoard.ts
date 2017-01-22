@@ -46,7 +46,7 @@ class DrawingBoard {
 
     topLeftCorner() {
         return this.viewPortCenter.sub(
-            new Vector(WIDTH, HEIGHT).div(2).mul(this.resolution)
+            this.getSize().div(2).mul(this.resolution)
         );
     }
 
