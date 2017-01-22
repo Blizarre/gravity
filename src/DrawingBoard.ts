@@ -12,11 +12,20 @@ class DrawingBoard {
         this.viewPortCenter = new Vector(0, 0);
     }
 
+    getSize(): Vector {
+        return new Vector(WIDTH, HEIGHT);
+    }
+
+    setCenter(center: Vector) {
+        // keep a copy of the vector
+        this.viewPortCenter = center.mul(1)
+    }
+
     scale(factor: number) {
         this.resolution *= factor;
     }
 
-    move(dx: number, dy: number) {
+    move_px(dx: number, dy: number) {
         this.viewPortCenter.addIp(new Vector(dx, dy).mulIp(this.resolution));
     }
 
