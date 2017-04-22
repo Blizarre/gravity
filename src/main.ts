@@ -127,7 +127,7 @@ window.onload = function() {
         switch(state) {
             case State.NONE:
                 state = State.CENTER_SELECTED;
-                new_planet = new Planet(drawingBoard.pointToWorld(new Vector(x, y)), 1, new Vector(0, 0), new Vector(0, 0), "red");
+                new_planet = new Planet(drawingBoard.screenToWorld(new Vector(x, y)), 1, new Vector(0, 0), new Vector(0, 0), "red");
                 log("New planet added at location {}", new_planet.position);
             break;
             case State.CENTER_SELECTED:

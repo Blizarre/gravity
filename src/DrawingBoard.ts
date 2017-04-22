@@ -29,11 +29,11 @@ class DrawingBoard {
         this.viewPortCenter.addIp(new Vector(dx, dy).mulIp(this.resolution));
     }
 
-    pointToWorld(pixel_coord: Vector) {
+    screenToWorld(pixel_coord: Vector) {
         return pixel_coord.mul(this.resolution).addIp(this.topLeftCorner())
     }
 
-    worldToPoint(world_coord: Vector, topLeftCorner:Vector = undefined) {
+    worldToScreen(world_coord: Vector, topLeftCorner:Vector = undefined) {
         let tlc = topLeftCorner == null ? this.topLeftCorner() : topLeftCorner
         return world_coord.sub(tlc).divIp(this.resolution);
     }
@@ -54,7 +54,7 @@ class DrawingBoard {
     draw(planets: Planet[], debug: boolean, renderTime: number) {
         let ct = this.ctx;
         for (let p of planets) {
-            let relativePosition = this.worldToPoint(p.position);
+            let relativePosition = this.worldToScreen(p.position);
 
             // Draw PLanet
             ct.beginPath();
