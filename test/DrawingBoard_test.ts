@@ -11,7 +11,6 @@ describe("Drawing Board", function() {
             for(var j =-1000; j < 1000; j+=500)
             {
                 let center = new Vector(i, j)
-                console.log("(" + i + "," + j + ")")
                 // setcenter will change the central value in the WORLD coordinate system.
                 draw.setCenter(center)
                 // X--------------+
