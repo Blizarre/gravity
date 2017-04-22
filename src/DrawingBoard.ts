@@ -12,7 +12,7 @@ class DrawingBoard {
         this.viewPortCenter = new Vector(0, 0);
     }
 
-    getSize(): Vector {
+    getSize_px(): Vector {
         return new Vector(WIDTH, HEIGHT);
     }
 
@@ -46,7 +46,7 @@ class DrawingBoard {
 
     topLeftCorner() {
         return this.viewPortCenter.sub(
-            this.getSize().div(2).mul(this.resolution)
+            this.getSize_px().div(2).mul(this.resolution)
         );
     }
 
