@@ -5,6 +5,8 @@ import Vector from "./Vector";
 class DrawingBoard {
 
     viewPortCenter: Vector;
+
+    // resolution in meter / pixel
     resolution: number;
 
     constructor(public ctx: CanvasRenderingContext2D) {
@@ -17,7 +19,6 @@ class DrawingBoard {
     }
 
     setCenter(center: Vector) {
-        // keep a copy of the vector
         this.viewPortCenter = center.mul(1)
     }
 
