@@ -31,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/Blizarre/gravity/issues"
   },
-  "homepage": "https://github.com/Blizarre/gravity#readme"
+  "homepage": "https://github.com/Blizarre/gravity#readme",
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  }
 }
