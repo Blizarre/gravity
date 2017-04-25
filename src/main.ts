@@ -61,6 +61,9 @@ class World {
     update(timestep: number) {
         // update the position vector
         for (let p of this.planets) {
+            if(p.isEmpty()) {
+                continue
+            }
             p.position.addIp(
                 // (velocity + acceleration * timestep / 2) * timestep
                 p.velocity.add(p.acceleration.mul(timestep).div(2)).mul(timestep)
@@ -69,9 +72,12 @@ class World {
 
         // Update the velocity vector
         for (let p1 of this.planets) {
+            if(p1.isEmpty()) { 
+                continue;
+            }
             let sum_forces = new Vector(0, 0);
             for (let p2 of this.planets) {
-                if (p1 == p2) {
+                if (p1 == p2 || p2.isEmpty() ) {
                     continue;
                     // collision: FIXME: might miss if tow elements are very very fast
                 } else if (p1.position.sub(p2.position).norm() < p1.radius + p2.radius) {
@@ -118,26 +124,54 @@ window.onload = function() {
         if (event.key == "p") { pause = !pause; }
     }
 
+
+    $canv.onmousemove = (event: MouseEvent) => {
+        // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
+        let rect = $canv.getBoundingClientRect();
+        let x: number = event.clientX - rect.left;
+        let y: number = event.clientY - rect.top;
+        let mousePosition = new Vector(x, y);
+        switch(state) {
+            case State.CENTER_SELECTED:
+                new_planet.setRadius(drawingBoard.screenToWorld(mousePosition).sub(new_planet.position).norm(), false)
+            break;
+            case State.RADIUS_SELECTED:
+                new_planet.velocity = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
+            break;
+            case State.VELOCITY_SELECTED:
+                new_planet.acceleration = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
+            break;
+        }
+    }
+
+
     $canv.onclick = (event: MouseEvent) => {
         // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
         let rect = $canv.getBoundingClientRect();
         let x = event.clientX - rect.left;
         let y = event.clientY - rect.top;
-        log("(" + x + ", " + y + ")");
+        let mousePosition = new Vector(x, y);
         switch(state) {
             case State.NONE:
                 state = State.CENTER_SELECTED;
-                new_planet = new Planet(drawingBoard.screenToWorld(new Vector(x, y)), 1, new Vector(0, 0), new Vector(0, 0), "red");
+                new_planet = new Planet(drawingBoard.screenToWorld(mousePosition), 1, new Vector(0, 0), new Vector(0, 0), "red", true);
+                world.planets.push(new_planet)
                 log("New planet added at location {}", new_planet.position);
             break;
             case State.CENTER_SELECTED:
+                new_planet.setRadius(drawingBoard.screenToWorld(mousePosition).sub(new_planet.position).norm(), false)
                 state = State.RADIUS_SELECTED;
             break;
             case State.RADIUS_SELECTED:
+                new_planet.velocity = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
                 state = State.VELOCITY_SELECTED;
             break;
             case State.VELOCITY_SELECTED:
+                log("new planet added")
+                new_planet.acceleration = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
+                new_planet.updateMass()
                 state = State.NONE;
+                new_planet = null
             break;
         }
     }
