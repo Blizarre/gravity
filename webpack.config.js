@@ -1,7 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: "./src/main.ts",
+    entry: ["./src/main.ts", "./src/hammer.js"],
     output: {
         filename: "bundle.js"
     },

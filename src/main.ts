@@ -6,6 +6,7 @@ import { G_CST, DEFAULT_RESOLUTION, WIDTH, HEIGHT } from "./constants";
 import Vector from "./Vector";
 import Planet from "./Planet";
 import DrawingBoard from "./DrawingBoard";
+import * as HammerJS from "hammerjs"
 
 function log(msg: string, param: any = undefined) {
     if(param != null) {
@@ -117,6 +118,48 @@ window.onload = function() {
         if (event.key == "d") { debug = !debug; }
         if (event.key == "p") { pause = !pause; }
     }
+
+    var hammertime = new Hammer($canv);
+    hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+    var last: Vector = null;
+    hammertime.on('panstart', function(ev) {
+        log("Beginning of pan")
+        last = new Vector(0,0);
+    })
+
+    hammertime.on('panend', function(ev) {
+        last = null;
+        log("End of pan")
+    })
+
+    hammertime.on('pan', function(ev) {
+        var newVect = new Vector(-ev.deltaX, -ev.deltaY)
+        var diff = newVect.sub(last);
+        drawingBoard.move_px(diff.x, diff.y);
+        last = newVect
+    });
+
+
+    $canv.onmousemove = (event: MouseEvent) => {
+        // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
+        let rect = $canv.getBoundingClientRect();
+        let x: number = event.clientX - rect.left;
+        let y: number = event.clientY - rect.top;
+        let mousePosition = new Vector(x, y);
+        switch(state) {
+            case State.CENTER_SELECTED:
+                new_planet.setRadius(drawingBoard.screenToWorld(mousePosition).sub(new_planet.position).norm(), false)
+            break;
+            case State.RADIUS_SELECTED:
+                new_planet.velocity = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
+            break;
+            case State.VELOCITY_SELECTED:
+                new_planet.acceleration = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
+            break;
+        }
+    }
+
 
     $canv.onclick = (event: MouseEvent) => {
         // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
