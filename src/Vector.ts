@@ -55,6 +55,10 @@ class Vector {
         this.y *= other;
         return this;
     }
+
+    toString(): String {
+        return "(" + this.x + ", " + this.y + ")"
+    }
 }
 
 export default Vector;
