@@ -104,22 +104,39 @@ class World {
 
 enum State { NONE, CENTER_SELECTED, RADIUS_SELECTED, VELOCITY_SELECTED }
 
+function PrepareCanvasDOM() {
+    let $canv = document.createElement("canvas");
+    document.body.appendChild($canv);
+
+    $canv.width = window.innerWidth
+    $canv.height = window.innerHeight
+    
+    document.body.style.margin = "0px"
+
+    let style = $canv.style 
+    style.width = "100%"
+    style.height = "100%"
+    style.margin = "0px"
+    style.padding = "0px"
+    return $canv
+}
+
 window.onload = function() {
     let debug = true;
     let pause = false;
-    let $canv = document.createElement("canvas");
-    $canv.style.width = "100%"
-    $canv.style.height = "100%"
-    $canv.width = window.innerWidth
-    $canv.height = window.innerHeight
+    let $canv = PrepareCanvasDOM()
+
     let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
     let world = new World(NB_PLANETS);
     let drawingBoard = new DrawingBoard(new Vector($canv.width, $canv.height), ctx);
     let state = State.NONE;
     let new_planet: Planet;
 
-    document.body.appendChild($canv);
-    window.addEventListener('resize', function() { $canv.width = window.innerWidth; $canv.height = window.innerHeight; drawingBoard.setSize_px($canv.width, $canv.height) }, false);
+    window.addEventListener('resize', function() { 
+        $canv.width = window.innerWidth;
+        $canv.height = window.innerHeight;
+        drawingBoard.setSize_px($canv.width, $canv.height)
+    }, false);
 
     document.onkeypress = (event: KeyboardEvent) => {
         if (event.key == "+") { drawingBoard.scale(0.5); }
