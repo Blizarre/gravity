@@ -2,7 +2,7 @@ const TIMESTEP = 0.5
 const NB_PLANETS = 10;
 
 
-import { G_CST, DEFAULT_RESOLUTION, WIDTH, HEIGHT } from "./constants";
+import { G_CST, DEFAULT_RESOLUTION } from "./constants";
 import Vector from "./Vector";
 import Planet from "./Planet";
 import DrawingBoard from "./DrawingBoard";
@@ -21,7 +21,7 @@ class World {
 
     planets: Planet[] = [];
 
-    constructor(public width: number, public height: number, public nb_planets: number) {
+    constructor(public nb_planets: number) {
         // Sun 1
         this.planets.push(new Planet(
             new Vector(0, 5000000),
@@ -101,22 +101,25 @@ class World {
     }
 }
 
-let $canv = document.createElement("canvas");
-$canv.width = WIDTH;
-$canv.height = HEIGHT;
 
 enum State { NONE, CENTER_SELECTED, RADIUS_SELECTED, VELOCITY_SELECTED }
 
 window.onload = function() {
     let debug = true;
     let pause = false;
+    let $canv = document.createElement("canvas");
+    $canv.style.width = "100%"
+    $canv.style.height = "100%"
+    $canv.width = window.innerWidth
+    $canv.height = window.innerHeight
     let ctx: CanvasRenderingContext2D = $canv.getContext("2d");
-    let world = new World(WIDTH, HEIGHT, NB_PLANETS);
-    let drawingBoard = new DrawingBoard(ctx);
+    let world = new World(NB_PLANETS);
+    let drawingBoard = new DrawingBoard(new Vector($canv.width, $canv.height), ctx);
     let state = State.NONE;
     let new_planet: Planet;
 
     document.body.appendChild($canv);
+    window.addEventListener('resize', function() { $canv.width = window.innerWidth; $canv.height = window.innerHeight; drawingBoard.setSize_px($canv.width, $canv.height) }, false);
 
     document.onkeypress = (event: KeyboardEvent) => {
         if (event.key == "+") { drawingBoard.scale(0.5); }

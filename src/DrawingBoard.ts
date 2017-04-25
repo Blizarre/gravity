@@ -1,4 +1,4 @@
-import { DEFAULT_RESOLUTION, WIDTH, HEIGHT } from "./constants";
+import { DEFAULT_RESOLUTION } from "./constants";
 import Planet from "./Planet";
 import Vector from "./Vector";
 
@@ -9,13 +9,17 @@ class DrawingBoard {
     // resolution in meter / pixel
     resolution: number;
 
-    constructor(public ctx: CanvasRenderingContext2D) {
+    constructor(public size_px: Vector, public ctx: CanvasRenderingContext2D) {
         this.resolution = DEFAULT_RESOLUTION;
         this.viewPortCenter = new Vector(0, 0);
     }
 
     getSize_px(): Vector {
-        return new Vector(WIDTH, HEIGHT);
+        return this.size_px;
+    }
+
+    setSize_px(width: number, height: number) {
+        this.size_px = new Vector(width, height);
     }
 
     setCenter(center: Vector) {
@@ -42,7 +46,7 @@ class DrawingBoard {
     clear() {
         let ct = this.ctx;
         ct.fillStyle = "black";
-        ct.fillRect(0, 0, ct.canvas.clientWidth, ct.canvas.clientHeight);
+        ct.fillRect(0, 0, this.size_px.x, this.size_px.y);
     }
 
     topLeftCorner() {

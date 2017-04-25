@@ -3,7 +3,7 @@ import Vector from "../src/Vector";
 
 
 describe("Drawing Board", function() {
-    let draw = new DrawingBoard(undefined);
+    let draw = new DrawingBoard(new Vector(0, 0), undefined);
 
     it("can be moved across the world view", function() {
         for(var i =-1000; i < 1000; i+=500)
@@ -28,7 +28,7 @@ describe("Drawing Board", function() {
         }
     })
 
-    draw = new DrawingBoard(undefined);
+    draw = new DrawingBoard(new Vector(0, 0), undefined);
 
     it("will give the same pixel location after being transformed to world space and back", function() {
       for(var i =-1000; i < 1000; i+=100)
