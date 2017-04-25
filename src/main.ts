@@ -125,27 +125,41 @@ window.onload = function() {
         if (event.key == "p") { pause = !pause; }
     }
 
-    var hammertime = new Hammer($canv);
-    hammertime.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    var mc = new Hammer.Manager($canv);
+    var pinch = new Hammer.Pinch();
+    var pan = new Hammer.Pan();
+    pinch.recognizeWith(pan);
+    mc.add([pan, pinch]);
 
-    var last: Vector = null;
-    hammertime.on('panstart', function(ev) {
-        log("Beginning of pan")
-        last = new Vector(0,0);
-    })
-
-    hammertime.on('panend', function(ev) {
-        last = null;
-        log("End of pan")
-    })
-
-    hammertime.on('pan', function(ev) {
-        var newVect = new Vector(-ev.deltaX, -ev.deltaY)
-        var diff = newVect.sub(last);
-        drawingBoard.move_px(diff.x, diff.y);
-        last = newVect
+    var lastPan: Vector = null;
+    var lastPinch: number = null;
+    
+    mc.on('pinchstart panstart', function(ev) {
+        log('Start of ' + ev.type)
+        lastPan = new Vector(0,0);
+        lastPinch = ev.scale;
     });
 
+    mc.on('pinch pan', function(ev) {
+        if(lastPan != null && lastPinch != null) {
+            var newPinch: number = ev.scale
+            var diff = newPinch - lastPinch;
+
+            drawingBoard.scale(1/(1+diff))
+            lastPinch = newPinch
+
+            var newVect = new Vector(-ev.deltaX, -ev.deltaY)
+            var diffPan = newVect.sub(lastPan);
+            drawingBoard.move_px(diffPan.x, diffPan.y);
+            lastPan = newVect
+        }
+    });
+
+    mc.on('pinchend panend pitchcancel', function(ev) {
+        log('End of ' + ev.type)
+        lastPinch = null;
+        lastPan = null
+    });
 
     $canv.onmousemove = (event: MouseEvent) => {
         // http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element/18053642#18053642
