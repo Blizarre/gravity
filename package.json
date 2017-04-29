@@ -5,6 +5,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/jasmine": "^2.5.38",
+    "@types/hammerjs": "^2.0.34",
     "html-webpack-plugin": "^2.24.1",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
