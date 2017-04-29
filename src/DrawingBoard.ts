@@ -38,7 +38,7 @@ class DrawingBoard {
         return pixel_coord.mul(this.resolution).addIp(this.topLeftCorner())
     }
 
-    worldToScreen(world_coord: Vector, topLeftCorner:Vector = undefined) {
+    worldToScreen(world_coord: Vector, topLeftCorner: Vector = undefined) {
         let tlc = topLeftCorner == null ? this.topLeftCorner() : topLeftCorner
         return world_coord.sub(tlc).divIp(this.resolution);
     }

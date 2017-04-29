@@ -51,7 +51,7 @@ class World {
     update(timestep: number) {
         // update the position vector
         for (let p of this.planets) {
-            if(p.isEmpty()) {
+            if (p.isEmpty()) {
                 continue
             }
             p.position.addIp(
@@ -62,12 +62,12 @@ class World {
 
         // Update the velocity vector
         for (let p1 of this.planets) {
-            if(p1.isEmpty()) {
+            if (p1.isEmpty()) {
                 continue;
             }
             let sum_forces = new Vector(0, 0);
             for (let p2 of this.planets) {
-                if (p1 == p2 || p2.isEmpty() ) {
+                if (p1 == p2 || p2.isEmpty()) {
                     continue;
                     // collision: FIXME: might miss if tow elements are very very fast
                 } else if (p1.position.sub(p2.position).norm() < p1.radius + p2.radius) {

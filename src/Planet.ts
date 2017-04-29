@@ -9,8 +9,8 @@ class Planet {
         public velocity: Vector = new Vector(0, 0),
         public acceleration: Vector = new Vector(0, 0),
         public color: string,
-        empty=false) {
-        if(empty) {
+        empty = false) {
+        if (empty) {
             this.mass = 0
         } else {
             this.updateMass()
@@ -19,16 +19,16 @@ class Planet {
 
     updateMass() {
         // Mass is volume * Density
-        this.mass = (4 / 3) * Math.PI * this.radius * this.radius * this.radius * DENSITY;        
+        this.mass = (4 / 3) * Math.PI * this.radius * this.radius * this.radius * DENSITY;
     }
 
     isEmpty(): boolean {
         return this.mass == 0
     }
-    
-    setRadius(new_radius: number, updateMass=true) {
+
+    setRadius(new_radius: number, updateMass = true) {
         this.radius = new_radius
-        if(updateMass) {
+        if (updateMass) {
             this.updateMass()
         }
     }

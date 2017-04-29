@@ -10,7 +10,7 @@ import DrawingBoard from "./DrawingBoard";
 import * as HammerJS from "hammerjs"
 
 function log(msg: string, param: any = undefined) {
-    if(param != null) {
+    if (param != null) {
         console.log(msg.replace("{}", param + ''))
     } else {
         console.log(msg)
@@ -28,10 +28,10 @@ function PrepareCanvasDOM() {
 
     $canv.width = window.innerWidth
     $canv.height = window.innerHeight
-    
+
     document.body.style.margin = "0px"
 
-    let style = $canv.style 
+    let style = $canv.style
     style.width = "100%"
     style.height = "100%"
     style.margin = "0px"
@@ -39,7 +39,7 @@ function PrepareCanvasDOM() {
     return $canv
 }
 
-window.onload = function() {
+window.onload = function () {
     let debug = true;
     let pause = false;
     let $canv = PrepareCanvasDOM()
@@ -50,7 +50,7 @@ window.onload = function() {
     let state = State.NONE;
     let new_planet: Planet;
 
-    window.addEventListener('resize', function() { 
+    window.addEventListener('resize', function () {
         $canv.width = window.innerWidth;
         $canv.height = window.innerHeight;
         drawingBoard.setSize_px($canv.width, $canv.height)
@@ -72,19 +72,19 @@ window.onload = function() {
 
     var lastPan: Vector = null;
     var lastPinch: number = null;
-    
-    mc.on('pinchstart panstart', function(ev) {
+
+    mc.on('pinchstart panstart', function (ev) {
         log('Start of ' + ev.type)
-        lastPan = new Vector(0,0);
+        lastPan = new Vector(0, 0);
         lastPinch = ev.scale;
     });
 
-    mc.on('pinch pan', function(ev) {
-        if(lastPan != null && lastPinch != null) {
+    mc.on('pinch pan', function (ev) {
+        if (lastPan != null && lastPinch != null) {
             var newPinch: number = ev.scale
             var diff = newPinch - lastPinch;
 
-            drawingBoard.scale(1/(1+diff))
+            drawingBoard.scale(1 / (1 + diff))
             lastPinch = newPinch
 
             var newVect = new Vector(-ev.deltaX, -ev.deltaY)
@@ -94,7 +94,7 @@ window.onload = function() {
         }
     });
 
-    mc.on('pinchend panend pitchcancel', function(ev) {
+    mc.on('pinchend panend pitchcancel', function (ev) {
         log('End of ' + ev.type)
         lastPinch = null;
         lastPan = null
@@ -106,16 +106,16 @@ window.onload = function() {
         let x: number = event.clientX - rect.left;
         let y: number = event.clientY - rect.top;
         let mousePosition = new Vector(x, y);
-        switch(state) {
+        switch (state) {
             case State.CENTER_SELECTED:
                 new_planet.setRadius(drawingBoard.screenToWorld(mousePosition).sub(new_planet.position).norm(), false)
-            break;
+                break;
             case State.RADIUS_SELECTED:
                 new_planet.velocity = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
-            break;
+                break;
             case State.VELOCITY_SELECTED:
                 new_planet.acceleration = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
-            break;
+                break;
         }
     }
 
@@ -126,28 +126,28 @@ window.onload = function() {
         let x = event.clientX - rect.left;
         let y = event.clientY - rect.top;
         let mousePosition = new Vector(x, y);
-        switch(state) {
+        switch (state) {
             case State.NONE:
                 state = State.CENTER_SELECTED;
                 new_planet = new Planet(drawingBoard.screenToWorld(mousePosition), 1, new Vector(0, 0), new Vector(0, 0), "red", true);
                 world.planets.push(new_planet)
                 log("New planet added at location {}", new_planet.position);
-            break;
+                break;
             case State.CENTER_SELECTED:
                 new_planet.setRadius(drawingBoard.screenToWorld(mousePosition).sub(new_planet.position).norm(), false)
                 state = State.RADIUS_SELECTED;
-            break;
+                break;
             case State.RADIUS_SELECTED:
                 new_planet.velocity = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
                 state = State.VELOCITY_SELECTED;
-            break;
+                break;
             case State.VELOCITY_SELECTED:
                 log("new planet added")
                 new_planet.acceleration = drawingBoard.screenToWorld(mousePosition).sub(new_planet.position)
                 new_planet.updateMass()
                 state = State.NONE;
                 new_planet = null
-            break;
+                break;
         }
     }
 
@@ -181,7 +181,7 @@ window.onload = function() {
         // todo: create Debug structure with enable flag and infos
         drawingBoard.clear();
         drawingBoard.draw(world.planets, debug, lastTime);
-        if(new_planet != null) {
+        if (new_planet != null) {
             drawingBoard.draw([new_planet], false, lastTime);
         }
         let t2 = new Date();
