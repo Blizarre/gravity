@@ -48,6 +48,9 @@ class World {
         }
     }
 
+    clear() {
+        this.planets = []
+    }
 
     compute_force(planet: Planet, other: Planet): Vector {
         // this is direction * distance
@@ -143,6 +146,7 @@ window.onload = function() {
         if (event.key == "-") { drawingBoard.scale(2); }
         if (event.key == "d") { debug = !debug; }
         if (event.key == "p") { pause = !pause; }
+        if (event.key == "c") { world.clear(); }
     }
 
     var mc = new Hammer.Manager($canv);
