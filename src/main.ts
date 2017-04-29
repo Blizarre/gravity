@@ -21,7 +21,7 @@ class World {
 
     planets: Planet[] = [];
 
-    constructor(public nb_planets: number) {
+    constructor(nb_planets: number) {
         // Sun 1
         this.planets.push(new Planet(
             new Vector(0, 5000000),
