@@ -6,7 +6,6 @@ import World from "./World";
 import Vector from "./Vector";
 import Planet from "./Planet";
 import DrawingBoard from "./DrawingBoard";
-import * as HammerJS from "hammerjs"
 
 function log(msg: string, param: any = undefined) {
     if (param != null) {
