@@ -2,7 +2,6 @@ const TIMESTEP = 0.5
 const NB_PLANETS = 10;
 
 
-import { DEFAULT_RESOLUTION } from "./constants";
 import World from "./World";
 import Vector from "./Vector";
 import Planet from "./Planet";
